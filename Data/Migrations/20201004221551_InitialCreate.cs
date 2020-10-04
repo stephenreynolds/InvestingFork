@@ -191,6 +191,80 @@ namespace InvestingOak.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Project",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    InitialBalance = table.Column<decimal>(type: "decimal(38, 2)", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(38, 2)", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Project", x => x.Name);
+                    table.ForeignKey(
+                        name: "FK_Project_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Position",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Symbol = table.Column<string>(type: "TEXT", nullable: false),
+                    Open = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Close = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Note = table.Column<string>(type: "TEXT", nullable: true),
+                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
+                    ProjectName = table.Column<string>(type: "TEXT", nullable: true),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: true),
+                    OpenPrice = table.Column<decimal>(type: "decimal(38, 3)", nullable: true),
+                    ClosePrice = table.Column<decimal>(type: "decimal(38, 3)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Position", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Position_Project_ProjectName",
+                        column: x => x.ProjectName,
+                        principalTable: "Project",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Leg",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Strike = table.Column<decimal>(type: "decimal(38, 1)", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    OpenPrice = table.Column<decimal>(type: "decimal(38, 3)", nullable: false),
+                    ClosePrice = table.Column<decimal>(type: "decimal(38, 3)", nullable: false),
+                    OptionTradeId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Leg", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Leg_Position_OptionTradeId",
+                        column: x => x.OptionTradeId,
+                        principalTable: "Position",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -240,6 +314,11 @@ namespace InvestingOak.Migrations
                 column: "Expiration");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Leg_OptionTradeId",
+                table: "Leg",
+                column: "OptionTradeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_Expiration",
                 table: "PersistedGrants",
                 column: "Expiration");
@@ -253,6 +332,16 @@ namespace InvestingOak.Migrations
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Position_ProjectName",
+                table: "Position",
+                column: "ProjectName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Project_UserId",
+                table: "Project",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -276,10 +365,19 @@ namespace InvestingOak.Migrations
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
+                name: "Leg");
+
+            migrationBuilder.DropTable(
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Position");
+
+            migrationBuilder.DropTable(
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

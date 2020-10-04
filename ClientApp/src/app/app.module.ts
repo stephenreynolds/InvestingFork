@@ -11,6 +11,8 @@ import { NewsFeedComponent } from './news-feed/news-feed.component';
 import { AdviserComponent } from './adviser/adviser.component';
 import { TradingViewModule } from '../tradingview/tradingview.module';
 import { ThemeSelectorComponent } from './theme-selector/theme-selector.component';
+import { UserMenuComponent } from './user-menu/user-menu.component';
+import {PaperTradingModule} from "../paper-trading/paper-trading.module";
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { ThemeSelectorComponent } from './theme-selector/theme-selector.componen
     HomeComponent,
     NavMenuComponent,
     NewsFeedComponent,
-    ThemeSelectorComponent
+    ThemeSelectorComponent,
+    UserMenuComponent
   ],
   imports: [
     AppRoutingModule,
@@ -27,6 +30,7 @@ import { ThemeSelectorComponent } from './theme-selector/theme-selector.componen
     FontAwesomeModule,
     NgbModule,
     TradingViewModule,
+    PaperTradingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

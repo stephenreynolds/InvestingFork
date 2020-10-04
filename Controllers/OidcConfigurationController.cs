@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +17,7 @@ namespace InvestingOak.Controllers
         [HttpGet("_configuration/{clientId}")]
         public IActionResult GetClientRequestParameters([FromRoute]string clientId)
         {
-            var parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);
+            IDictionary<string, string> parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);
             return Ok(parameters);
         }
     }

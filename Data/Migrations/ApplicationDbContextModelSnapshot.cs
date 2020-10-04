@@ -119,7 +119,7 @@ namespace InvestingOak.Migrations
                     b.ToTable("PersistedGrants");
                 });
 
-            modelBuilder.Entity("InvestingOak.Models.ApplicationUser", b =>
+            modelBuilder.Entity("InvestingOak.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -181,6 +181,103 @@ namespace InvestingOak.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.Leg", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("ClosePrice")
+                        .HasColumnType("decimal(38, 3)");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("OpenPrice")
+                        .HasColumnType("decimal(38, 3)");
+
+                    b.Property<int?>("OptionTradeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Strike")
+                        .HasColumnType("decimal(38, 1)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OptionTradeId");
+
+                    b.ToTable("Leg");
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.Position", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Close")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Open")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectName");
+
+                    b.ToTable("Position");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Position");
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.Project", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(38, 2)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("InitialBalance")
+                        .HasColumnType("decimal(38, 2)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -315,6 +412,52 @@ namespace InvestingOak.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("InvestingOak.Data.Entities.OptionTrade", b =>
+                {
+                    b.HasBaseType("InvestingOak.Data.Entities.Position");
+
+                    b.HasDiscriminator().HasValue("OptionTrade");
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.StockTrade", b =>
+                {
+                    b.HasBaseType("InvestingOak.Data.Entities.Position");
+
+                    b.Property<decimal>("ClosePrice")
+                        .HasColumnType("decimal(38, 3)");
+
+                    b.Property<decimal>("OpenPrice")
+                        .HasColumnType("decimal(38, 3)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasDiscriminator().HasValue("StockTrade");
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.Leg", b =>
+                {
+                    b.HasOne("InvestingOak.Data.Entities.OptionTrade", null)
+                        .WithMany("Legs")
+                        .HasForeignKey("OptionTradeId");
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.Position", b =>
+                {
+                    b.HasOne("InvestingOak.Data.Entities.Project", null)
+                        .WithMany("Positions")
+                        .HasForeignKey("ProjectName");
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.Project", b =>
+                {
+                    b.HasOne("InvestingOak.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -326,7 +469,7 @@ namespace InvestingOak.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("InvestingOak.Models.ApplicationUser", null)
+                    b.HasOne("InvestingOak.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -335,7 +478,7 @@ namespace InvestingOak.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("InvestingOak.Models.ApplicationUser", null)
+                    b.HasOne("InvestingOak.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,7 +493,7 @@ namespace InvestingOak.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InvestingOak.Models.ApplicationUser", null)
+                    b.HasOne("InvestingOak.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -359,11 +502,21 @@ namespace InvestingOak.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("InvestingOak.Models.ApplicationUser", null)
+                    b.HasOne("InvestingOak.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.Project", b =>
+                {
+                    b.Navigation("Positions");
+                });
+
+            modelBuilder.Entity("InvestingOak.Data.Entities.OptionTrade", b =>
+                {
+                    b.Navigation("Legs");
                 });
 #pragma warning restore 612, 618
         }
