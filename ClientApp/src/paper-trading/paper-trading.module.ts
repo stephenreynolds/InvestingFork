@@ -5,7 +5,7 @@ import {RouterModule} from "@angular/router";
 import { ProjectTreeComponent } from './project-tree/project-tree.component';
 import {ProjectService} from "./shared/project.service";
 import { NewProjectComponent } from './new-project/new-project.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AuthorizeGuard} from "../api-authorization/authorize.guard";
 import { ProjectComponent } from './project/project.component';
 import { ProjectDeletedComponent } from './project-deleted/project-deleted.component';
@@ -15,6 +15,7 @@ import {ProjectSettingsComponent} from "./project/project-settings/project-setti
 import {NewTradeComponent} from "./project/new-trade/new-trade.component";
 import {OpenTradesComponent} from "./project/open-trades/open-trades.component";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {FinnhubService} from "../app/shared/finnhub.service";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     CommonModule,
     FontAwesomeModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       {
         path: 'paper', component: PaperTradingComponent, canActivate: [AuthorizeGuard], children: [
@@ -45,6 +47,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
   ],
   providers: [
     CurrencyPipe,
+    FinnhubService,
     ProjectService
   ]
 })
