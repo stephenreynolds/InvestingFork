@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/56937766735c48c4986457677cf93fa1)](https://app.codacy.com/gh/stephenreynolds/InvestingFork?utm_source=github.com&utm_medium=referral&utm_content=stephenreynolds/InvestingFork&utm_campaign=Badge_Grade_Settings)
 ﻿[![Build Status](https://travis-ci.com/stephenreynolds/InvestingFork.svg?branch=master)](https://travis-ci.com/stephenreynolds/InvestingFork)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0cda63a48acd40c9b4332b4995e6194b)](https://app.codacy.com/gh/stephenreynolds/InvestingFork?utm_source=github.com&utm_medium=referral&utm_content=stephenreynolds/InvestingFork&utm_campaign=Badge_Grade)
 
